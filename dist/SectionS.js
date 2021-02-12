@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 class SectionS {
     constructor(options) {
         // provide options
@@ -64,4 +66,4 @@ class SectionS {
         this.events.changed(this.currentSection, this.options.has ? this.sections[this.currentSection].classList.includes(this.options.has) : undefined);
     }
 }
-export default SectionS;
+exports.default = SectionS;
