@@ -12,6 +12,8 @@ export default [
         output: {
             file: 'index.d.ts'
         },
-        plugins: [dts()]
+        plugins: [
+            dts()
+        ]
     }
 ]
