@@ -1,7 +1,6 @@
 {
-  "name": "section-s",
-  "version": "0.0.2",
-  "main": "index.js",
+  "name": "@peter.ingram/section-s",
+  "version": "1.0.0",
   "repository": "git@github.com:peteringram0/section-s.git",
   "author": "Peter Ingram <p.ingram@managedracks.co.uk>",
   "license": "MIT",

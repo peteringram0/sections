@@ -9,6 +9,17 @@ declare class SectionS {
     private currentSection;
     private sections;
     private events;
+    /**
+     * Runs on window resize
+     */
+    private resizeEvent;
+    /**
+     * Runs on page scrolling
+     */
+    private scrollEvent;
+    /**
+     * init
+     */
     constructor(options?: Partial<Options>);
     /**
      * store changed event user is subscribed to
@@ -23,12 +34,12 @@ declare class SectionS {
      */
     private setupSections;
     /**
-     * Will run on scroll
-     */
-    private scrollEvent;
-    /**
      * check and call changed event
      */
     private callChangedEvent;
+    /**
+     * Bounce functions. Prevent methods from being called to many times
+     */
+    private debounce;
 }
 export default SectionS;
