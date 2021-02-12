@@ -95,4 +95,4 @@ class SectionS {
 
 }
 
-export {SectionS}
+export default SectionS
