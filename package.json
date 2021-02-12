@@ -1,0 +1,24 @@
+{
+  "name": "section-s",
+  "version": "0.0.1",
+  "main": "index.js",
+  "repository": "git@github.com:peteringram0/section-s.git",
+  "author": "Peter Ingram <p.ingram@managedracks.co.uk>",
+  "license": "MIT",
+  "scripts": {
+    "prepublishOnly": "yarn run clean && tsc && rollup -c",
+    "clean": "rimraf dist && rimraf index.js && rimraf index.d.ts"
+  },
+  "devDependencies": {
+    "rollup": "^2.38.5",
+    "typescript": "^4.1.5"
+  },
+  "files": [
+    "index.js",
+    "index.d.ts"
+  ],
+  "dependencies": {
+    "rimraf": "^3.0.2",
+    "rollup-plugin-dts": "^2.0.1"
+  }
+}
