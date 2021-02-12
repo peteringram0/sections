@@ -31,4 +31,4 @@ declare class SectionS {
      */
     private callChangedEvent;
 }
-export default SectionS;
+export { SectionS };

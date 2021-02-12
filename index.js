@@ -65,4 +65,4 @@ class SectionS {
     }
 }
 
-export default SectionS;
+export { SectionS };

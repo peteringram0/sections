@@ -1,2 +1,1 @@
-import SectionS from './SectionS';
-export default SectionS;
+export * from './SectionS';

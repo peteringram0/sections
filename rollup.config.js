@@ -5,7 +5,7 @@ export default [
         input: 'dist/index.js',
         output: {
             file: 'index.js'
-        }
+        },
     },
     {
         input: 'dist/index.d.ts',
