@@ -67,8 +67,18 @@ class SectionS {
 
   // Runs on window resize
   private resizeEvent = this.debounce(() => {
+
     this.sections.splice(0, this.sections.length)
     this.setupSections()
+
+    // re-setup bounding
+    this.elementsEvent.map(i => {
+      const bounding = i.el.getBoundingClientRect()
+      i.from = bounding.top
+      i.to = bounding.top + bounding.height
+      return i
+    })
+    
   })
 
   // Runs on page scrolling

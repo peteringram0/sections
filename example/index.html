@@ -5,8 +5,23 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Example / Demo</title>
   <style>
+    #info {
+      position: fixed;
+      top: 0;
+      left: 0;
+      padding: 1rem;
+      color: white;
+    }
+
+    .section {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+
     #a,
     #b {
       position: fixed;
@@ -14,6 +29,7 @@
       background-color: red;
       border: none;
       color: white;
+      transition: all .3s ease;
     }
 
     #a {
@@ -39,10 +55,12 @@
   <button id="a">Button A</button>
   <button id="b">Button B</button>
 
-  <div class="section blue" style="height: 100vh; background-color: blue;"></div>
-  <div class="section red" style="height: 100vh; background-color: red;"></div>
-  <div class="section blue" style="height: 100vh; background-color: blue;"></div>
-  <div class="section red" style="height: 100vh; background-color: red;"></div>
+  <div id="info"></div>
+
+  <div class="section blue" style="height: 100vh; background-color: blue;">Section 0</div>
+  <div class="section red" style="height: 100vh; background-color: red;">Section 1</div>
+  <div class="section blue" style="height: 100vh; background-color: blue;">Section 2</div>
+  <div class="section red" style="height: 100vh; background-color: red;">Section 3</div>
 
   <script type="module">
     import SectionS from './../lib/SectionS.js'
@@ -52,7 +70,7 @@
 
     new SectionS()
       .sectionStarted((section, direction) => {
-        console.log('changed', section, direction)
+        document.getElementById('info').innerHTML = JSON.stringify(section) + ', ' + direction
       })
       .elementEvent(a, (eventType, direction, currentSection) => {
         colorButton(a, eventType, direction, currentSection)
