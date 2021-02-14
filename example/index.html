@@ -1,22 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <style>
+    #a,
+    #b {
+      position: fixed;
+      padding: 1rem;
+      background-color: red;
+      border: none;
+      color: white;
+    }
+
+    #a {
+      margin: 4rem;
+      top: 0;
+      right: 0;
+    }
+
+    #b {
+      margin: 3rem;
+      bottom: 0;
+      left: 0;
+    }
+
+    .blue {
+      background-color: blue !important;
+    }
+  </style>
 </head>
+
 <body>
-  <div class="section dark" style="height: 100vh; background-color: blue;"></div>
-  <div class="section" style="height: 100vh; background-color: red;"></div>
-  <div class="section dark" style="height: 100vh; background-color: pink;"></div>
+
+  <button id="a">Button A</button>
+  <button id="b">Button B</button>
+
+  <div class="section blue" style="height: 100vh; background-color: blue;"></div>
+  <div class="section red" style="height: 100vh; background-color: red;"></div>
+  <div class="section blue" style="height: 100vh; background-color: blue;"></div>
+  <div class="section red" style="height: 100vh; background-color: red;"></div>
+
   <script type="module">
     import SectionS from './../lib/SectionS.js'
-    
-    new SectionS({has: 'dark'})
-      .changed((index, hasDark) => {
-        console.log('changed', index, hasDark)
+
+    const a = document.getElementById('a')
+    const b = document.getElementById('b')
+
+    new SectionS()
+      .sectionStarted((section, direction) => {
+        console.log('changed', section, direction)
       })
+      .elementEvent(a, (eventType, direction, currentSection) => {
+        colorButton(a, eventType, direction, currentSection)
+      })
+      .elementEvent(b, (eventType, direction, currentSection) => {
+        colorButton(b, eventType, direction, currentSection)
+      })
+
+    /**
+     * Change the color of the button based on the sections
+     */
+    function colorButton(el, eventType, direction, currentSection) {
+
+      if (eventType === 'end') {
+
+        // revert on reverse !!
+        if (direction === 'up' && !currentSection.classList.includes('red') || 
+          direction === 'down' && currentSection.classList.includes('red')) {
+          el.classList.remove('blue')
+        } else if (direction === 'up' && currentSection.classList.includes('red') || 
+          direction === 'down' && !currentSection.classList.includes('red')) {
+          el.classList.add('blue')
+        } 
+
+      } else if(eventType === 'middle') {
+
+        // change at middle
+        if (direction === 'down' && currentSection.classList.includes('red') || 
+          direction === 'up' && !currentSection.classList.includes('red')) {
+          el.classList.remove('blue')
+        } else if (direction === 'down' && !currentSection.classList.includes('red') || 
+          direction === 'up' && currentSection.classList.includes('red')) {
+          el.classList.add('blue')
+        }
+
+      }
+
+    }
+
   </script>
 </body>
+
 </html>

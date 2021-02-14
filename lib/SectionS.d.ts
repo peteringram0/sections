@@ -1,21 +1,30 @@
 export interface Options {
     selector: string;
-    offset: number | null;
-    has: string | null;
 }
-declare type ChangeEvent = (sectionIndex: number, hasResult?: boolean) => void;
+declare type sectionStartedEvent = (section: SectionInterface, direction: Direction) => void;
+interface SectionInterface {
+    index: number;
+    from: number;
+    to: number;
+    classList: string[];
+}
+declare enum EventType {
+    START = "start",
+    MIDDLE = "middle",
+    END = "end"
+}
+declare enum Direction {
+    UP = "up",
+    DOWN = "down"
+}
 declare class SectionS {
     private readonly options;
-    private currentSection;
+    private activeSection;
+    private _scrollDirection;
     private sections;
+    private elementsEvent;
     private events;
-    /**
-     * Runs on window resize
-     */
     private resizeEvent;
-    /**
-     * Runs on page scrolling
-     */
     private scrollEvent;
     /**
      * init
@@ -24,11 +33,27 @@ declare class SectionS {
     /**
      * store changed event user is subscribed to
      */
-    changed(cb: ChangeEvent): void;
+    sectionStarted(cb: sectionStartedEvent): SectionS;
+    /**
+     * Add element for watching events
+     */
+    elementEvent(el: HTMLElement, cb: (type: EventType, direction: Direction) => void): SectionS;
     /**
      * Destroy
      */
     destroy(): void;
+    /**
+     * Caculate scroll direction
+     */
+    private scrollDirection;
+    /**
+     * Section change
+     */
+    private pageEvent;
+    /**
+     * Check for element events within the screoll
+     */
+    private elementEvents;
     /**
      * Caculate the sections based on the document and store
      */
@@ -36,7 +61,7 @@ declare class SectionS {
     /**
      * check and call changed event
      */
-    private callChangedEvent;
+    private callPageEnteredEvent;
     /**
      * Bounce functions. Prevent methods from being called to many times
      */
