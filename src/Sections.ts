@@ -2,27 +2,27 @@ export interface Options {
   selector: string
 }
 
-type sectionStartedEvent = (section: SectionInterface, direction: Direction) => void
-type elementsInterfaceEvent = (type: EventType, direction: Direction, currentSection: SectionInterface) => void
+export type sectionStartedEvent = (section: SectionInterface, direction: Direction) => void
+export type elementsInterfaceEvent = (type: EventType, direction: Direction, currentSection: SectionInterface) => void
 
 interface Events {
   sectionStarted?: sectionStartedEvent
 }
 
-interface SectionInterface {
+export interface SectionInterface {
   index: number
   from: number
   to: number
   classList: string[]
 }
 
-enum EventType {
+export enum EventType {
   START = 'start',
   MIDDLE = 'middle',
   END = 'end'
 }
 
-interface ElementsInterface {
+export interface ElementsInterface {
   from: number
   to: number
   active: boolean
@@ -31,12 +31,12 @@ interface ElementsInterface {
   cb: elementsInterfaceEvent
 }
 
-interface ScrollDirectionInterface {
+export interface ScrollDirectionInterface {
   direction: Direction
   lastScrollTop: number
 }
 
-enum Direction {
+export enum Direction {
   UP = 'up',
   DOWN = 'down'
 }
