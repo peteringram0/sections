@@ -1,6 +1,6 @@
 {
   "name": "@peter.ingram/sections",
-  "version": "1.1.1",
+  "version": "1.1.0",
   "repository": "git@github.com:peteringram0/section-s.git",
   "author": "Peter Ingram <p.ingram@managedracks.co.uk>",
   "license": "MIT",
@@ -17,9 +17,6 @@
     "lib/Sections.d.ts"
   ],
   "main": "lib/Sections.js",
-  "publishConfig": {
-    "registry":"https://npm.pkg.github.com"
-  },
   "dependencies": {
     "rimraf": "^3.0.2",
     "rollup-plugin-commonjs": "^10.1.0",
