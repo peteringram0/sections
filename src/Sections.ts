@@ -3,6 +3,7 @@ export interface Options {
 }
 
 type sectionStartedEvent = (section: SectionInterface, direction: Direction) => void
+type elementsInterfaceEvent = (type: EventType, direction: Direction, currentSection: SectionInterface) => void
 
 interface Events {
   sectionStarted?: sectionStartedEvent
@@ -26,8 +27,8 @@ interface ElementsInterface {
   to: number
   active: boolean
   middleTriggered: boolean
-  el: HTMLElement
-  cb: (type: EventType, direction: Direction, currentSection: SectionInterface) => void
+  el: HTMLElement | Element
+  cb: elementsInterfaceEvent
 }
 
 interface ScrollDirectionInterface {
@@ -118,7 +119,7 @@ class Sections {
   /**
    * Add element for watching events
    */
-  elementEvent(el: HTMLElement, cb: (type: EventType, direction: Direction) => void): Sections {
+  elementEvent(el: HTMLElement | Element, cb: elementsInterfaceEvent): Sections {
     const bounding = el.getBoundingClientRect()
     this.elementsEvent.push({
       from: bounding.top,
