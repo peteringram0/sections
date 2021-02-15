@@ -1,58 +1,97 @@
 export interface Options {
   selector: string
-  offset: number | null
-  has: string | null
 }
 
-type ChangeEvent = (sectionIndex: number, hasResult?: boolean) => void
+type sectionStartedEvent = (section: SectionInterface, direction: Direction) => void
 
 interface Events {
-  changed?: ChangeEvent
+  sectionStarted?: sectionStartedEvent
 }
 
-class SectionS {
+interface SectionInterface {
+  index: number
+  from: number
+  to: number
+  classList: string[]
+}
+
+enum EventType {
+  START = 'start',
+  MIDDLE = 'middle',
+  END = 'end'
+}
+
+interface ElementsInterface {
+  from: number
+  to: number
+  active: boolean
+  middleTriggered: boolean
+  el: HTMLElement
+  cb: (type: EventType, direction: Direction, currentSection: SectionInterface) => void
+}
+
+interface ScrollDirectionInterface {
+  direction: Direction
+  lastScrollTop: number
+}
+
+enum Direction {
+  UP = 'up',
+  DOWN = 'down'
+}
+
+class Sections {
 
   // provide options
   private readonly options: Options = {
     selector: '.section',
-    offset: null,
-    has: null
   }
 
   // current section we are on
-  private currentSection = 0
+  private activeSection: SectionInterface | null = null
+
+  // current direction
+  private _scrollDirection: ScrollDirectionInterface = {
+    direction: Direction.DOWN,
+    lastScrollTop: 0
+  }
 
   // bottom of sections by number
-  private sections: { y: number, classList: string[] }[] = []
+  private sections: SectionInterface[] = []
+
+  // array of elements which we wll be watching
+  private elementsEvent: ElementsInterface[] = []
 
   // store events
   private events: Events = {}
 
-  /**
-   * Runs on window resize
-   */
+  // Runs on window resize
   private resizeEvent = this.debounce(() => {
+
     this.sections.splice(0, this.sections.length)
     this.setupSections()
+
+    // re-setup bounding
+    this.elementsEvent.map(i => {
+      const bounding = i.el.getBoundingClientRect()
+      i.from = bounding.top
+      i.to = bounding.top + bounding.height
+      return i
+    })
+    
   })
 
-  /**
-   * Runs on page scrolling
-   */
+  // Runs on page scrolling
   private scrollEvent = this.debounce(() => {
 
-    // work out what section were on
-    const sectionsY = this.sections.map(o => o.y)
+    // Watch scroll direction
+    this.scrollDirection()
 
-    const sectionId = Math.max(...sectionsY
-      .filter(e => window.scrollY >= e))
-    const sectionIndex = sectionsY.indexOf(sectionId) + 1
+    // Watch section event events
+    this.pageEvent()
 
-    // set current section and emit event if changed
-    if (this.currentSection !== sectionIndex) {
-      this.currentSection = sectionIndex
-      this.callChangedEvent()
-    }
+    // Watch for element events
+    this.elementEvents()
 
   }, 10)
 
@@ -62,6 +101,7 @@ class SectionS {
   constructor(options?: Partial<Options>) {
     this.options = Object.assign(this.options, options)
     this.setupSections()
+    this.pageEvent()
     window.addEventListener('scroll', this.scrollEvent.bind(this), true)
     window.addEventListener('resize', this.resizeEvent.bind(this), true)
   }
@@ -69,9 +109,26 @@ class SectionS {
   /**
    * store changed event user is subscribed to
    */
-  changed(cb: ChangeEvent): void {
-    this.events.changed = cb
-    this.callChangedEvent() // emit when registered
+  sectionStarted(cb: sectionStartedEvent): Sections {
+    this.events.sectionStarted = cb
+    this.callPageEnteredEvent() // emit when registered
+    return this
+  }
+
+  /**
+   * Add element for watching events
+   */
+  elementEvent(el: HTMLElement, cb: (type: EventType, direction: Direction) => void): Sections {
+    const bounding = el.getBoundingClientRect()
+    this.elementsEvent.push({
+      from: bounding.top,
+      to: bounding.top + bounding.height,
+      active: false,
+      middleTriggered: false,
+      el,
+      cb
+    })
+    return this
   }
 
   /**
@@ -80,29 +137,117 @@ class SectionS {
   destroy(): void {
     window.removeEventListener('scroll', this.scrollEvent.bind(this), true)
     window.removeEventListener('resize', this.resizeEvent.bind(this), true)
+    this.activeSection = null
+    this._scrollDirection = {
+      direction: Direction.DOWN,
+      lastScrollTop: 0
+    }
+    this.sections.splice(0, this.sections.length)
+    this.elementsEvent.splice(0, this.elementsEvent.length)
+    this.events = {}
+  }
+
+  /**
+   * Caculate scroll direction
+   */
+  private scrollDirection() {
+    if (window.pageYOffset > this._scrollDirection.lastScrollTop) {
+      this._scrollDirection.direction = Direction.DOWN
+    } else {
+      this._scrollDirection.direction = Direction.UP
+    }
+    this._scrollDirection.lastScrollTop = window.pageYOffset <= 0 ? 0 : window.pageYOffset
+  }
+
+  /**
+   * Section change
+   */
+  private pageEvent() {
+
+    // work out what section were on
+    const sectionsY = this.sections.map(o => o.to)
+    const sectionId = Math.max(...sectionsY.filter(e => window.scrollY >= e))
+    const sectionIndex = sectionsY.indexOf(sectionId) + 1
+
+    if (!this.activeSection) {
+      this.activeSection = this.sections[sectionIndex]
+      this.callPageEnteredEvent()
+    } else if (this.activeSection && this.activeSection.index !== sectionIndex) {
+      this.activeSection = this.sections[sectionIndex]
+      this.callPageEnteredEvent()
+    }
+
+  }
+
+  /**
+   * Check for element events within the screoll
+   */
+  private elementEvents() {
+    this.elementsEvent.forEach((i) => {
+
+      if (!this.activeSection) {
+        return
+      }
+
+      const start = this.activeSection.to - i.to
+      const end = this.activeSection.to - i.from
+      const center = Math.round(((end - start) / 2) + start) // works for B
+
+      if (!i.active && window.scrollY >= start && window.scrollY <= end) {
+        // start down
+        i.active = true
+        i.middleTriggered = false
+        i.cb(EventType.START, this._scrollDirection.direction, this.activeSection)
+      } else if (i.active && window.scrollY < start || i.active && window.scrollY > end) {
+        // end down
+        i.active = false
+        i.middleTriggered = false
+        i.cb(EventType.END, this._scrollDirection.direction, this.activeSection)
+      }
+
+      // Middle
+      if (i.active && !i.middleTriggered) {
+        // console.log('ping', window.scrollY, center)
+        if (this._scrollDirection.direction === Direction.DOWN && window.scrollY >= center ||
+          this._scrollDirection.direction === Direction.UP && window.scrollY <= center) {
+          i.middleTriggered = true
+          i.cb(EventType.MIDDLE, this._scrollDirection.direction, this.activeSection)
+        }
+      }
+
+    })
   }
 
   /**
    * Caculate the sections based on the document and store
    */
   private setupSections() {
-    this.sections = Array.from(window.document.querySelectorAll(this.options.selector)).map((el) => {
-      const y = Math.round(el.getBoundingClientRect().top + el.clientHeight) + window.scrollY + (this.options.offset ? this.options.offset : 0)
-      return { y, classList: [].slice.apply(el.classList) }
+    this.sections = Array.from(window.document.querySelectorAll(this.options.selector)).map((el, index) => {
+      // const from = Math.round(el.getBoundingClientRect().top) + window.scrollY + (this.options.offset ? this.options.offset : 0)
+      const from = Math.round(el.getBoundingClientRect().top) + window.scrollY
+      const to = Math.round(el.getBoundingClientRect().top + el.clientHeight) + window.scrollY
+      return {
+        from,
+        to,
+        classList: [].slice.apply(el.classList),
+        index
+      }
     })
   }
 
   /**
    * check and call changed event
    */
-  private callChangedEvent() {
+  private callPageEnteredEvent() {
 
-    if (!this.events.changed) {
+    if (!this.events.sectionStarted) {
       return
     }
 
     // call changed event
-    this.events.changed(this.currentSection, this.options.has ? this.sections[this.currentSection].classList.includes(this.options.has) : undefined)
+    if (this.activeSection) {
+      this.events.sectionStarted(this.activeSection, this._scrollDirection.direction)
+    }
 
   }
 
@@ -120,4 +265,4 @@ class SectionS {
 
 }
 
-export default SectionS
+export default Sections
