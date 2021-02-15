@@ -40,7 +40,7 @@ enum Direction {
   DOWN = 'down'
 }
 
-class SectionS {
+class Sections {
 
   // provide options
   private readonly options: Options = {
@@ -109,7 +109,7 @@ class SectionS {
   /**
    * store changed event user is subscribed to
    */
-  sectionStarted(cb: sectionStartedEvent): SectionS {
+  sectionStarted(cb: sectionStartedEvent): Sections {
     this.events.sectionStarted = cb
     this.callPageEnteredEvent() // emit when registered
     return this
@@ -118,7 +118,7 @@ class SectionS {
   /**
    * Add element for watching events
    */
-  elementEvent(el: HTMLElement, cb: (type: EventType, direction: Direction) => void): SectionS {
+  elementEvent(el: HTMLElement, cb: (type: EventType, direction: Direction) => void): Sections {
     const bounding = el.getBoundingClientRect()
     this.elementsEvent.push({
       from: bounding.top,
@@ -265,4 +265,4 @@ class SectionS {
 
 }
 
-export default SectionS
+export default Sections

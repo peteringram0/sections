@@ -1,5 +1,5 @@
 {
-  "name": "@peter.ingram/section-s",
+  "name": "@peter.ingram/sections",
   "version": "1.1.0",
   "repository": "git@github.com:peteringram0/section-s.git",
   "author": "Peter Ingram <p.ingram@managedracks.co.uk>",
@@ -13,10 +13,10 @@
     "typescript": "^4.1.5"
   },
   "files": [
-    "lib/SectionS.js",
-    "lib/SectionS.d.ts"
+    "lib/Sections.js",
+    "lib/Sections.d.ts"
   ],
-  "main": "lib/SectionS.js",
+  "main": "lib/Sections.js",
   "dependencies": {
     "rimraf": "^3.0.2",
     "rollup-plugin-commonjs": "^10.1.0",

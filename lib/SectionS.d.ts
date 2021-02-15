@@ -17,7 +17,7 @@ declare enum Direction {
     UP = "up",
     DOWN = "down"
 }
-declare class SectionS {
+declare class Sections {
     private readonly options;
     private activeSection;
     private _scrollDirection;
@@ -33,11 +33,11 @@ declare class SectionS {
     /**
      * store changed event user is subscribed to
      */
-    sectionStarted(cb: sectionStartedEvent): SectionS;
+    sectionStarted(cb: sectionStartedEvent): Sections;
     /**
      * Add element for watching events
      */
-    elementEvent(el: HTMLElement, cb: (type: EventType, direction: Direction) => void): SectionS;
+    elementEvent(el: HTMLElement, cb: (type: EventType, direction: Direction) => void): Sections;
     /**
      * Destroy
      */
@@ -67,4 +67,4 @@ declare class SectionS {
      */
     private debounce;
 }
-export default SectionS;
+export default Sections;

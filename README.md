@@ -1,4 +1,4 @@
-# SectionS
+# Sections
 
 A tiny 7kb class to detect the page section the user is on as well as spy on fixed page elements to run events against based on the page sections (when the element starts to change between a section, the middle and the end of the section).
 
@@ -6,7 +6,7 @@ The library can be used to trigger events on the sections based on the users scr
 
 ## Usage: 
 ````typescript
-new SectionS('.section')
+new Sections('.section')
   .sectionStarted((section, direction) => {
     /**
      triggered when the section changes.
@@ -59,5 +59,5 @@ interface SectionInterface {
 
 ### Yarn / NPM:
 ````bash
-yarn add @peter.ingram/section-s
+yarn add @peter.ingram/sections
 ````

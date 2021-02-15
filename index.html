@@ -63,12 +63,12 @@
   <div class="section red" style="height: 100vh; background-color: red;">Section 3</div>
 
   <script type="module">
-    import SectionS from './../lib/SectionS.js'
+    import Sections from './../lib/Sections.js'
 
     const a = document.getElementById('a')
     const b = document.getElementById('b')
 
-    new SectionS()
+    new Sections()
       .sectionStarted((section, direction) => {
         document.getElementById('info').innerHTML = JSON.stringify(section) + ', ' + direction
       })
