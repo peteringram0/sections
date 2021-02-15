@@ -4,6 +4,8 @@ A tiny 7kb class to detect the page section the user is on as well as spy on fix
 
 The library can be used to trigger events on the sections based on the users scroll position as well as trigger events on fixed elements related to the main sections.
 
+[Demo](https://peteringram0.github.io/sections/)
+
 ## Usage: 
 ````typescript
 new Sections('.section')
