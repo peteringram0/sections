@@ -2,6 +2,7 @@ export interface Options {
     selector: string;
 }
 declare type sectionStartedEvent = (section: SectionInterface, direction: Direction) => void;
+declare type elementsInterfaceEvent = (type: EventType, direction: Direction, currentSection: SectionInterface) => void;
 interface SectionInterface {
     index: number;
     from: number;
@@ -37,7 +38,7 @@ declare class Sections {
     /**
      * Add element for watching events
      */
-    elementEvent(el: HTMLElement, cb: (type: EventType, direction: Direction) => void): Sections;
+    elementEvent(el: HTMLElement | Element, cb: elementsInterfaceEvent): Sections;
     /**
      * Destroy
      */
