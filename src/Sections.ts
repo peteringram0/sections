@@ -1,5 +1,7 @@
 export interface Options {
   selector: string
+  scrollEventBounce: number
+  resizeEventBounce: number
 }
 
 export type sectionStartedEvent = (section: SectionInterface, direction: Direction) => void
@@ -46,6 +48,8 @@ class Sections {
   // provide options
   private readonly options: Options = {
     selector: '.section',
+    scrollEventBounce: 10,
+    resizeEventBounce: 70
   }
 
   // current section we are on
@@ -80,7 +84,7 @@ class Sections {
       return i
     })
     
-  })
+  }, this.options.resizeEventBounce)
 
   // Runs on page scrolling
   private scrollEvent = this.debounce(() => {
@@ -94,7 +98,7 @@ class Sections {
     // Watch for element events
     this.elementEvents()
 
-  }, 10)
+  }, this.options.scrollEventBounce)
 
   /**
    * init

@@ -1,6 +1,6 @@
 # Sections
 
-A tiny 7kb class to detect the page section the user is on as well as spy on fixed page elements to run events against based on the page sections (when the element starts to change between a section, the middle and the end of the section).
+A tiny 7kb class (with no dependencies) to detect the page section the user is on as well as spy on fixed page elements to run events against based on the page sections (when the element starts to change between a section, the middle and the end of the section).
 
 The library can be used to trigger events on the sections based on the users scroll position as well as trigger events on fixed elements related to the main sections.
 
@@ -8,7 +8,7 @@ The library can be used to trigger events on the sections based on the users scr
 
 ## Usage: 
 ````typescript
-new Sections('.section')
+new Sections({selector: '.sections'})
   .sectionStarted((section, direction) => {
     /**
      triggered when the section changes.
@@ -19,6 +19,16 @@ new Sections('.section')
      add element event. Pass in the element and the method gets triggered when the element starts, the middle and the end meets the section's based on the section selector in the constructor. The direction and current section the user is on are provided into the method. This method is chainable.
      */
   })
+````
+
+### Options
+You are able to pass options when setting up Sections. These have default values and are optional.
+````typescript
+export interface Options {
+  selector: string
+  scrollEventBounce: number
+  resizeEventBounce: number
+}
 ````
 
 ### sectionStarted

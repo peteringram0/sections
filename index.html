@@ -23,7 +23,8 @@
     }
 
     #a,
-    #b {
+    #b,
+    #c {
       position: fixed;
       padding: 1rem;
       background-color: red;
@@ -44,6 +45,14 @@
       left: 0;
     }
 
+    #c {
+      padding: 5rem;
+      top: calc(50vh - 100px);
+      right: 0;
+      width: 100px;
+      height: 100px;
+    }
+
     .blue {
       background-color: blue !important;
     }
@@ -54,6 +63,7 @@
 
   <button id="a">Button A</button>
   <button id="b">Button B</button>
+  <button id="c">Button Middle</button>
 
   <div id="info"></div>
 
@@ -67,6 +77,7 @@
 
     const a = document.getElementById('a')
     const b = document.getElementById('b')
+    const c = document.getElementById('c')
 
     new Sections()
       .sectionStarted((section, direction) => {
@@ -77,6 +88,9 @@
       })
       .elementEvent(b, (eventType, direction, currentSection) => {
         colorButton(b, eventType, direction, currentSection)
+      })
+      .elementEvent(c, (eventType, direction, currentSection) => {
+        colorButton(c, eventType, direction, currentSection)
       })
 
     /**

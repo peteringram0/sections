@@ -1,20 +1,32 @@
 export interface Options {
     selector: string;
 }
-declare type sectionStartedEvent = (section: SectionInterface, direction: Direction) => void;
-declare type elementsInterfaceEvent = (type: EventType, direction: Direction, currentSection: SectionInterface) => void;
-interface SectionInterface {
+export declare type sectionStartedEvent = (section: SectionInterface, direction: Direction) => void;
+export declare type elementsInterfaceEvent = (type: EventType, direction: Direction, currentSection: SectionInterface) => void;
+export interface SectionInterface {
     index: number;
     from: number;
     to: number;
     classList: string[];
 }
-declare enum EventType {
+export declare enum EventType {
     START = "start",
     MIDDLE = "middle",
     END = "end"
 }
-declare enum Direction {
+export interface ElementsInterface {
+    from: number;
+    to: number;
+    active: boolean;
+    middleTriggered: boolean;
+    el: HTMLElement | Element;
+    cb: elementsInterfaceEvent;
+}
+export interface ScrollDirectionInterface {
+    direction: Direction;
+    lastScrollTop: number;
+}
+export declare enum Direction {
     UP = "up",
     DOWN = "down"
 }
