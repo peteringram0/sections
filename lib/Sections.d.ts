@@ -1,5 +1,7 @@
 export interface Options {
     selector: string;
+    scrollEventBounce: number;
+    resizeEventBounce: number;
 }
 export declare type sectionStartedEvent = (section: SectionInterface, direction: Direction) => void;
 export declare type elementsInterfaceEvent = (type: EventType, direction: Direction, currentSection: SectionInterface) => void;
