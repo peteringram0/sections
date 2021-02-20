@@ -43,6 +43,7 @@ export enum Direction {
   DOWN = 'down'
 }
 
+
 class Sections {
 
   // provide options
@@ -83,7 +84,7 @@ class Sections {
       i.to = bounding.top + bounding.height
       return i
     })
-    
+
   }, this.options.resizeEventBounce)
 
   // Runs on page scrolling
@@ -107,8 +108,8 @@ class Sections {
     this.options = Object.assign(this.options, options)
     this.setupSections()
     this.pageEvent()
-    window.addEventListener('scroll', this.scrollEvent.bind(this), true)
-    window.addEventListener('resize', this.resizeEvent.bind(this), true)
+    window.addEventListener('scroll', this.scrollEvent.bind(this), {passive: true})
+    window.addEventListener('resize', this.resizeEvent.bind(this), {passive: true})
   }
 
   /**
@@ -140,8 +141,8 @@ class Sections {
    * Destroy
    */
   destroy(): void {
-    window.removeEventListener('scroll', this.scrollEvent.bind(this), true)
-    window.removeEventListener('resize', this.resizeEvent.bind(this), true)
+    window.removeEventListener('scroll', this.scrollEvent.bind(this))
+    window.removeEventListener('resize', this.resizeEvent.bind(this))
     this.activeSection = null
     this._scrollDirection = {
       direction: Direction.DOWN,

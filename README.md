@@ -1,6 +1,6 @@
 # Sections
 
-A tiny 7kb class (with no dependencies) to detect the page section the user is on as well as spy on fixed page elements to run events against based on the page sections (when the element starts to change between a section, the middle and the end of the section).
+A tiny 4kb class (with no dependencies) to detect the page section the user is on as well as spy on fixed page elements to run events against based on the page sections (when the element starts to change between a section, the middle and the end of the section).
 
 The library can be used to trigger events on the sections based on the users scroll position as well as trigger events on fixed elements related to the main sections.
 

@@ -5,8 +5,9 @@
   "author": "Peter Ingram <p.ingram@managedracks.co.uk>",
   "license": "MIT",
   "scripts": {
-    "prepublishOnly": "yarn run clean && tsc",
-    "clean": "rimraf lib && rimraf index.js && rimraf index.d.ts"
+    "prepublishOnly": "yarn run clean:dist && tsc && yarn run minify",
+    "minify": "jsmin -o lib/Sections.js lib/Sections.js",
+    "clean:dist": "rimraf lib"
   },
   "main": "lib/Sections.js",
   "files": [
@@ -14,6 +15,7 @@
     "lib/Sections.d.ts"
   ],
   "devDependencies": {
+    "jsmin": "^1.0.1",
     "rimraf": "^3.0.2",
     "typescript": "^4.1.5"
   }
